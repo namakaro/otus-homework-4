@@ -1,6 +1,6 @@
 import React from "react";
 import { cleanup, render, screen, fireEvent } from "@testing-library/react";
-import { CellField } from "./CellField";
+import CellField from "./CellField";
 
 afterEach(cleanup);
 

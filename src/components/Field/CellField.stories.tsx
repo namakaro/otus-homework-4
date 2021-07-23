@@ -1,7 +1,6 @@
 import React from "react";
-import { action } from "@storybook/addon-actions";
 
-import { CellField } from "./CellField";
+import CellField from "./CellField";
 
 export default {
   title: "Field",
@@ -11,11 +10,10 @@ export default {
  }
 };
 
-export const CellFieldExample = (args: any) => {
+export const CellFieldExample = (args: CellFieldProps) => {
   return (
     <>
       <CellField
-        key="jsx"
         {...args}
       />
     </>

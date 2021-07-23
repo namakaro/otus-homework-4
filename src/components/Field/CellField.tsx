@@ -1,13 +1,5 @@
-import { action } from "@storybook/addon-actions";
 import React, { Component } from "react";
-import { Cell } from "./Cell"
-
-export interface Props {
-  xCount: number;
-  yCount: number;
-  clickMe?: (x: number, y: number) => void;
-  initialValue?: number;
-}
+import Cell from "./Cell"
 
 interface State {
   counter: number;
@@ -38,22 +30,22 @@ export class Toggler extends Component {
   }
 }
 
-const tt = (y:number, xCount: number, clickMe: (x: number, y: number) => void) => {
+const row = (y:number, xCount: number, clickMe: (x: number, y: number) => void) => {
   let x: number = 0;
-  const row = [];
+  const mas_row = [];
   while (x < xCount) { 
-    row.push(<Cell key={`${x}_${y}`} x={x} y={y} clickMe={clickMe}>{`${x}_${y}`}</Cell>);
+    mas_row.push(<Cell width={40} height={40} key={`${x}_${y}`} x={x} y={y} clickMe={clickMe}>{`${x}_${y}`}</Cell>);
     x++; 
   }
-  return row;
+  return mas_row;
 }
 
-export class CellField extends Component<Props, State> {
+class CellField extends Component<CellFieldProps, State> {
   state = {
     counter: this.props.initialValue || 0,
   };
 
-  constructor(props: Props) {
+  constructor(props: CellFieldProps) {
     super(props);
     this.state = {
       counter: props.initialValue || 0,
@@ -65,11 +57,11 @@ export class CellField extends Component<Props, State> {
   componentDidMount() {
       //здесь можно вызывать side-эффекты
       //подписываемся на событие клика мышкой
-      document.addEventListener("click", this.documentonClick)
+      document.addEventListener("click", this.documentOnClick)
   }
 
-  documentonClick = () => {
-    console.warn("documentonClick: Click!");
+  documentOnClick = () => {
+    console.log("documentonClick: Click!");
   }
 
   onClick = () => {
@@ -79,25 +71,27 @@ export class CellField extends Component<Props, State> {
   };
 
   //lifeciclehook, который решает, надо ли нашему компоненту перерисоываться или нет
-  shouldComponentUpdate(nextProps: Props, nextState: State) {
+  shouldComponentUpdate(nextProps: CellFieldProps, nextState: State) {
     const c: boolean = nextState.counter % 5 == 0;
-    c ? null : console.warn(`shouldComponentUpdate: ${nextState.counter} % 5 != 0`);
+    c ? null : console.log(`shouldComponentUpdate: ${nextState.counter} % 5 != 0`);
     return c; 
   }
 
   componentDidUpdate() {
-    console.warn(`componentDidUpdate: ${this.state.counter} % 5 == 0`);
-    console.warn("componentDidUpdate: Updated! this.state.counter + 2");
-    this.setState({
-      counter: this.state.counter + 2, 
-    });
-    console.warn(`state.counter =  ${this.state.counter}`); 
+    if (this.state.counter % 10 == 0) {
+      console.log(`componentDidUpdate: ${this.state.counter} % 10 == 0`);
+      console.log("componentDidUpdate: Updated! this.state.counter + 2");
+      this.setState({
+        counter: this.state.counter + 2, 
+      });
+    }
+    console.log(`state.counter =  ${this.state.counter}`); 
   }
 
   //lifeciclehook для высвобождения ресурсов, на которые был подписан ваш компонент
   //здесь нельзя делать setState
   componentWillUnmount() {
-    document.removeEventListener("click", this.documentonClick)
+    document.removeEventListener("click", this.documentOnClick)
   }
 
   render() {
@@ -105,7 +99,7 @@ export class CellField extends Component<Props, State> {
     let y: number = 0;
     const { counter } = this.state;
     while(y < this.props.yCount) {
-      filed.push(tt(y, this.props.xCount, this.onClick));
+      filed.push(row(y, this.props.xCount, this.onClick));
       filed.push(<br key={`${y}`}/>);
       y++;
     }
@@ -116,4 +110,6 @@ export class CellField extends Component<Props, State> {
     </>
     );
   }
-}
+};
+
+export default CellField;

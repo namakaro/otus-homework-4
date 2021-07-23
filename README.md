@@ -1,1 +1,1 @@
-# otus-homework-4
+## Домашнее задание по курсу React.js Developer (Otus). Components lifecycle
